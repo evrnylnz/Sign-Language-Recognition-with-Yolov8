@@ -1,0 +1,7 @@
+#path: C:\Users\evrny\Desktop\yolo_dataset
+train: C:\Users\evrny\Desktop\yolo_dataset\train\images
+val: C:\Users\evrny\Desktop\yolo_dataset\valid\images
+test: C:\Users\evrny\Desktop\yolo_dataset\test\images
+
+nc: 26
+names: ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']

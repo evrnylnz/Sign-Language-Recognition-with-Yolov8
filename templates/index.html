@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign2Text Convertor</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+            background-color: #33FFB5;
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        #content-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+            background-color: #33FFF0;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        #asl-image {
+            width: 480px;
+            height: 480px;
+            border: 4px solid #333;
+            border-radius: 8px;
+            margin: 0 10px;
+        }
+
+        #webcam-container {
+            margin: 20px;
+        }
+
+        #webcam {
+            width: 1280px;
+            height: 720px;
+            border: 4px solid #333;
+            border-radius: 8px;
+        }
+
+        #predicted-word {
+            font-size: 24px;
+            margin-top: 20px;
+            color: #333;
+        }
+
+        #clear-button {
+            font-size: 18px;
+            margin-left: 10px;
+            cursor: pointer;
+            background-color: #FF3333;
+            color: #FFF;
+            padding: 5px 10px;
+            border: none;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Sign2Text</h1>
+    <div id="content-container">
+        <img id="asl-image" src="{{ url_for('static', filename='sign_letters.png') }}" alt="ASL Letters">
+        <div id="webcam-container">
+            <img id="webcam" src="{{ url_for('video_feed') }}" width="640" height="480" />
+        </div>
+        <!-- Display the predicted word -->
+        <div id="predicted-word"></div>
+        <!-- Clear button -->
+        <button id="clear-button" onclick="clearWord()">Clear</button>
+    </div>
+
+    <!-- Include Socket.IO JavaScript library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.1.2/socket.io.js"></script>
+    <script>
+        // Connect to the Flask-SocketIO server
+        var socket = io.connect('http://' + document.domain + ':' + location.port);
+
+        // Variable to store the predicted word
+        var predictedWord = '';
+
+        // Listen for the 'update_letter' event
+        socket.on('update_letter', function(data) {
+            // Check if the predicted letter is not null or undefined
+            if (data.letter !== null && data.letter !== undefined) {
+                // Add the letter to the predicted word
+                predictedWord += data.letter;
+
+                // Update the content of the predicted word element
+                document.getElementById('predicted-word').innerText = 'Predicted Word: ' + predictedWord;
+            }
+        });
+
+        // Function to clear the predicted word
+        function clearWord() {
+            predictedWord = '';
+            document.getElementById('predicted-word').innerText = 'Predicted Word: ';
+        }
+    </script>
+</body>
+</html>
